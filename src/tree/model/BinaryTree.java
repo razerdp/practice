@@ -1,5 +1,12 @@
 package tree.model;
 
+import utils.Log;
+import utils.StringUtils;
+import utils.ToolUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -14,25 +21,75 @@ import java.util.Random;
 public class BinaryTree {
     private static Random sRandom = new Random();
 
-    private TreeNode root;
+    private List<TreeNode> nodeList;
 
-    public static BinaryTree create(int length) {
+    public static BinaryTree create() {
+        return create("A", "B", "C", "D", "E", "F", "G", "H", "I");
+    }
+
+    public static BinaryTree create(String... sources) {
         BinaryTree tree = new BinaryTree();
-        tree.root = new TreeNode("root");
+        if (ToolUtils.isEmpty(sources)) return tree;
 
-        String[] datas = {"A","B","C","D","E","F","G","H","I"};
-        int index = sRandom.nextInt(datas.length);
+        final int length = sources.length;
 
-        while (index < length) {
-            boolean isLeftNull = sRandom.nextBoolean();
-            boolean isRightNull = sRandom.nextBoolean();
-            while (isLeftNull && isRightNull) {
-                isLeftNull = sRandom.nextBoolean();
-                isRightNull = sRandom.nextBoolean();
+        tree.nodeList = new ArrayList<>(length);
+
+        //源数据
+        List<String> sourceList = Arrays.asList(sources);
+
+        //填入数据
+        for (int i = 0; i < length; i++) {
+            if (ToolUtils.isEmpty(sourceList)) break;
+            if (tree.nodeList.size() == 0) {
+                //随机取一个值作为根节点
+                int rootIndex = sRandom.nextInt(sourceList.size());
+                String rootData = sourceList.remove(rootIndex);
+                tree.nodeList.add(new TreeNode("root : " + rootData));
+            } else {
+                String childData = sourceList.remove(sRandom.nextInt(sourceList.size()));
+                tree.nodeList.add(new TreeNode(childData));
             }
         }
 
 
+        //往父节点填入子节点，留下最后一个父节点处理，因为它可能没有右孩子
+        for (int i = 0; i < length / 2 - 1; i++) {
+            //第n个节点的左孩子是2n，右孩子是2n+1
+            //如 1(2,3),2(4,5),3(6,7)
+            //因为list从0开始计数，因此+1
+            tree.nodeList.get(i).setLeft(tree.nodeList.get(i * 2 + 1));
+            tree.nodeList.get(i).setRight(tree.nodeList.get(i * 2 + 2));
+        }
+
+        //留下最后一个父节点
+
+        int lastIndex = length / 2 - 1;
+        tree.nodeList.get(lastIndex).setLeft(tree.nodeList.get(lastIndex * 2 + 1));
+        if (tree.nodeList.size() % 2 == 1) {
+            //如果有奇数个节点，最后一个父节点才有右孩子
+            tree.nodeList.get(lastIndex).setRight(tree.nodeList.get(lastIndex * 2 + 2));
+        }
+
+        Log.debug("=========构建完成，打印如下=========");
+        StringBuilder builder = new StringBuilder();
+        for (TreeNode treeNode : tree.nodeList) {
+            builder.append(treeNode.getData());
+            if (treeNode.getLeft() != null) {
+                builder.append(" [ left = ")
+                        .append(treeNode.getLeft().getData());
+            }
+            if (treeNode.getRight() != null) {
+                builder.append(" , right = ")
+                        .append(treeNode.getRight().getData())
+                        .append("] , ");
+            } else {
+                builder.append(" , right = empty] , ");
+            }
+        }
+        Log.debug(builder.toString());
+
+        return tree;
     }
 
 }

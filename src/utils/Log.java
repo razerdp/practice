@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Log {
+    private static final String DEFAULT_TAG = "PRACTICE";
     /**
      * 每条 Log 的 tag 输出的最大长度, 超过部分将被截断
      */
@@ -76,6 +77,27 @@ public class Log {
         Log.isOutToConsole = isOutToConsole;
         Log.isOutToFile = isOutToFile;
     }
+
+    public static void debug(String message) {
+        debug(DEFAULT_TAG, message);
+    }
+
+    public static void info(String message) {
+        info(DEFAULT_TAG, message);
+    }
+
+    public static void warn(String message) {
+        warn(DEFAULT_TAG, message);
+    }
+
+    public static void error(String message) {
+        error(DEFAULT_TAG, message);
+    }
+
+    public static void error(Exception e) {
+        error(DEFAULT_TAG, e);
+    }
+
 
     public static void debug(String tag, String message) {
         printLog(Level.DEBUG, tag, message, false);
