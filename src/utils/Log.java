@@ -24,7 +24,7 @@ public class Log {
     /**
      * 日志当前的输出级别, 默认为 INFO 级别
      */
-    private static Level logOutLevel = Level.INFO;
+    private static Level logOutLevel = Level.DEBUG;
 
     /**
      * 是否输出到控制台, 默认输出

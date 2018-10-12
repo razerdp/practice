@@ -8,7 +8,8 @@ import tree.model.BinaryTree;
 public class BinaryTreePractice {
 
     public static void main(String[] args) {
-        //层级搜索
-        BinaryTree tree = BinaryTree.create();
     }
+
+
+    public static void
 }

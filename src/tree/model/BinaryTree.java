@@ -36,7 +36,10 @@ public class BinaryTree {
         tree.nodeList = new ArrayList<>(length);
 
         //源数据
-        List<String> sourceList = Arrays.asList(sources);
+        List<String> sourceList = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            sourceList.add(sources[i]);
+        }
 
         //填入数据
         for (int i = 0; i < length; i++) {
@@ -75,17 +78,12 @@ public class BinaryTree {
         StringBuilder builder = new StringBuilder();
         for (TreeNode treeNode : tree.nodeList) {
             builder.append(treeNode.getData());
-            if (treeNode.getLeft() != null) {
-                builder.append(" [ left = ")
-                        .append(treeNode.getLeft().getData());
-            }
-            if (treeNode.getRight() != null) {
-                builder.append(" , right = ")
-                        .append(treeNode.getRight().getData())
-                        .append("] , ");
-            } else {
-                builder.append(" , right = empty] , ");
-            }
+
+            builder.append(" [ ")
+                    .append(treeNode.getLeft()==null?"null":treeNode.getLeft().getData())
+                    .append(" , ")
+                    .append(treeNode.getRight()==null?"null":treeNode.getRight().getData())
+                    .append(" ] ");
         }
         Log.debug(builder.toString());
 
